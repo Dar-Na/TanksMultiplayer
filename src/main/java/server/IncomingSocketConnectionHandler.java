@@ -12,7 +12,7 @@ public class IncomingSocketConnectionHandler implements Runnable{
         try{
             System.out.println("Opening server at port " + port);
             server = new ServerSocket(port); // server socket for listening clients
-            server.setSoTimeout(1000);  // will block a call to accept for sertain time
+            server.setSoTimeout(1000);  // will block a call to accept for certain time
         }
         catch (IOException ex){
             throw new IllegalStateException();

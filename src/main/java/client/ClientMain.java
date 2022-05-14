@@ -16,8 +16,8 @@ public class ClientMain {
                 ObjectInputStream ios = new ObjectInputStream(is);
 
                 String server_cmd = "";
-                while (server_cmd != "end"){
-                    System.out.println("Print message to a server");
+                while (!server_cmd.equals("end")){
+                    System.out.println("Print essage to a server");
                     String message = scanner.nextLine();
                     oos.writeObject(message);
                     server_cmd = String.valueOf(ios.readObject());
