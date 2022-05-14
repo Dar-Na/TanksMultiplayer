@@ -6,5 +6,4 @@ public class ServerMain {
       Thread serverThread = new Thread(new IncomingSocketConnectionHandler(9797)); // thread that handles incoming clients
       serverThread.start();
   }
-
 }

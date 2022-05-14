@@ -24,7 +24,7 @@ public class SocketConnectionHandler implements Runnable {
                     output.writeObject(Integer.toString(message.length()));
                 }
                 else{
-                    output.writeObject("end");        // sending end - sygnal to stop communication
+                    output.writeObject("end");        // sending end - signal to stop communication
                 }
 
             }

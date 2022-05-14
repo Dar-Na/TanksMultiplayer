@@ -1,40 +1,15 @@
 package client;
 
-import java.io.*;
-import java.net.Socket;
-import java.util.Scanner;
-
 public class ClientMain {
     public static void main(String[] args) {
-        Scanner scanner  = new Scanner( System.in);
-        System.out.println("I am a Client?");
-        try(Socket client = new Socket("localhost",9797)){
-            try {
-                OutputStream os = client.getOutputStream();
-                InputStream is = client.getInputStream();
-                ObjectOutputStream oos = new ObjectOutputStream(os);
-                ObjectInputStream ios = new ObjectInputStream(is);
+        // Server Communication
+        System.out.println("Creating a client.");
+        Client client = new Client("127.0.0.1", 9797);
+        Thread thread = new Thread(client);
+        thread.start();
 
-                String server_cmd = "";
-                while (!server_cmd.equals("end")){
-                    System.out.println("Print essage to a server");
-                    String message = scanner.nextLine();
-                    oos.writeObject(message);
-                    server_cmd = String.valueOf(ios.readObject());
-                    System.out.println("Server reply with "+server_cmd);
-                }
-                ios.close();
-                oos.close();
-                is.close();
-                os.close();
+        // Game drawing
+        GameView gameView = new GameView();
 
-            }
-            catch (IOException | ClassNotFoundException ex) {
-                System.out.println(ex);
-            }
-        }
-        catch (IOException ex){
-            System.out.println(ex);
-        }
     }
 }
