@@ -1,8 +1,11 @@
 package client;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Tank {
     private Point coordinates;
@@ -15,11 +18,12 @@ public class Tank {
         this.keyHandler = keyHandler;
         this.jPanel = jPanel;
         System.out.println("Reading the image...");
-//        try {
-//            sprite = ImageIO.read(new File("src/main/resources/tank.png"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            sprite = ImageIO.read(new File("src/main/resources/tank.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         System.out.println("End reading...");
     }
     public Point getCoordinates(){
@@ -37,9 +41,10 @@ public class Tank {
     }
     public void draw(Graphics2D g2){
 
-        g2.setColor(Color.WHITE);
-        g2.fillRect(coordinates.x,coordinates.y,50,50);
-      // g2.drawImage(sprite, coordinates.x,coordinates.y,50,50, null);
+//        g2.setColor(Color.WHITE);
+//        g2.fillRect(coordinates.x,coordinates.y,50,50);
+      g2.drawImage(sprite, coordinates.x,coordinates.y,50,50, null);
+        jPanel.requestFocus(); // focus back to panel
     }
     public void update(){
         if(keyHandler.rightPressed){

@@ -15,13 +15,17 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel(){
         System.out.println("Creating key handler");
         keyHandler = new KeyHandler();
-        tank = new Tank(new Point(200,200), this, keyHandler);
+
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true); // will improve game's rendering
+
         this.addKeyListener(keyHandler); // frame is now respond for key events
         this.setFocusable(true); // for key handling
+        this.setLayout(null);
+
+        tank = new Tank(new Point(200,200), this, keyHandler);
     }
     public void startGameThread(){
         this.gameThread = new Thread(this); // starting game loop
