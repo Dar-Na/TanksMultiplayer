@@ -10,7 +10,6 @@ public class ClientMain {
 
         // Game drawing
 
-
         GameView gameView = new GameView();
 
 

@@ -1,15 +1,23 @@
 package client;
 
+import messages.MessageClientServer;
+import messages.MessageServerClient;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Client implements Runnable{      // Communication
+    List<Tank> tanks;
     String serverIp;
-    int port;
     Socket client;
-
+    int port;
+    MessageClientServer messageClientServer = null;
+    MessageServerClient messageServerClient = null;
     public Client(String serverIp,int serverPort){
+        tanks = new ArrayList<>();
         this.serverIp = serverIp;
         this.port = serverPort;
         try{
@@ -33,9 +41,10 @@ public class Client implements Runnable{      // Communication
             while (!serverCmd.equals("end")){
                 System.out.println("Print message to a server");
                 String message = scanner.nextLine();
-                oos.writeObject(message);
-                serverCmd = String.valueOf(ios.readObject());
-                System.out.println("Server reply with "+serverCmd);
+                messageClientServer = new MessageClientServer(message);
+                oos.writeObject(messageClientServer);
+                MessageServerClient messageServerClient = (MessageServerClient) ios.readObject();
+                System.out.println("Server reply with "+messageServerClient.getMessage());
             }
             ios.close();
             oos.close();

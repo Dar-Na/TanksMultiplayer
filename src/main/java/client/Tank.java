@@ -43,7 +43,8 @@ public class Tank {
 
 //        g2.setColor(Color.WHITE);
 //        g2.fillRect(coordinates.x,coordinates.y,50,50);
-      g2.drawImage(sprite, coordinates.x,coordinates.y,50,50, null);
+        g2.drawImage(sprite, coordinates.x,coordinates.y,50,50, null);
+
         jPanel.requestFocus(); // focus back to panel
     }
     public void update(){

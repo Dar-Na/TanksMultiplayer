@@ -1,13 +1,17 @@
 package server;
 
+import messages.MessageClientServer;
+import messages.MessageServerClient;
+
 import java.io.*;
 import java.net.Socket;
 
 public class SocketConnectionHandler implements Runnable {
     private final Socket socket;
-    public SocketConnectionHandler(Socket socket) {
+    private final int unique_id;
+    public SocketConnectionHandler(Socket socket, int unique_id) {
         this.socket = socket;
-
+        this.unique_id = unique_id;
     }
     @Override
     public void run() {
@@ -16,16 +20,14 @@ public class SocketConnectionHandler implements Runnable {
             ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
             String message = "";
             while (!message.equals("quit")){      // while client didn't send quit message keep exchange
+                MessageClientServer messageClientServer;
+                messageClientServer = (MessageClientServer)input.readObject();
+                System.out.println("Message from client:" +  unique_id);
+                System.out.println(messageClientServer.getMessage());
+                MessageServerClient messageServerClient = new MessageServerClient("Got your message - Server probably");
 
-                message = String.valueOf(input.readObject());
-                System.out.println("Message from client:");
-                System.out.println(message);
-                if(message.length() < 10 && !(message.equals("quit"))){     // testing - return length if message < 10
-                    output.writeObject(Integer.toString(message.length()));
-                }
-                else{
-                    output.writeObject("end");        // sending end - signal to stop communication
-                }
+                output.writeObject(messageServerClient);
+
 
             }
 

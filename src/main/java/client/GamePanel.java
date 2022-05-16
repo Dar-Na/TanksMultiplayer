@@ -12,13 +12,14 @@ public class GamePanel extends JPanel implements Runnable {
     // FPS
     final  int fps = 60;
     Tank tank;
+
     public GamePanel(){
         System.out.println("Creating key handler");
         keyHandler = new KeyHandler();
 
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.BLACK);
+        this.setBackground(Color.ORANGE);
         this.setDoubleBuffered(true); // will improve game's rendering
 
         this.addKeyListener(keyHandler); // frame is now respond for key events

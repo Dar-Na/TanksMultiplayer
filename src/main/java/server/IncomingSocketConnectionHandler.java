@@ -7,7 +7,7 @@ import java.net.SocketTimeoutException;
 
 public class IncomingSocketConnectionHandler implements Runnable{
     private final ServerSocket server;
-
+    private static int numOfClients = 0;
     public IncomingSocketConnectionHandler(int port){
         try{
             System.out.println("Opening server at port " + port);
@@ -27,7 +27,9 @@ public class IncomingSocketConnectionHandler implements Runnable{
 
                 Socket socket = server.accept(); // thread to accept client
                 System.out.println("Client connected");
-                new Thread(new SocketConnectionHandler(socket)).start(); // working with client
+                int uniqueId = numOfClients;
+                numOfClients++;
+                new Thread(new SocketConnectionHandler(socket, uniqueId)).start(); // working with client
             }
             catch (SocketTimeoutException ex){ // information about timeout
                 //System.out.println(ex);
