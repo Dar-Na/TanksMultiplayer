@@ -1,70 +1,60 @@
 package client;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class GameView extends JFrame implements KeyListener {
-    JLabel label;
-    ImageIcon icon;
+// Drawing world
+public class GameView extends JFrame implements MouseListener {
+
+    Thread gameThread;
+
     GameView(){
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // closing when x is pressed
+
+
+
         this.setSize(500,500);
-        this.setLayout(null);
-        this.addKeyListener(this); // frame is now respond for key events
 
-        icon = new ImageIcon("src/main/resources/tankImage.png");
-        label = new JLabel();
-        label.setBounds(0,0,100,100);
-        //label.setBackground(Color.RED);
-        //label.setOpaque(true);// display background color
-        label.setIcon(icon);
-        this.add(label);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setTitle("Tanks");
+        this.setLocationRelativeTo(null); // putting frame in the center
         this.setVisible(true); // frame is visible
+        GamePanel gamePanel = new GamePanel(); // creating a panel
+        gamePanel.startGameThread();
+        this.add(gamePanel);
+        this.pack();
+
+        this.addMouseListener(this); // frame is now respond for mouse events
+
+
     }
+
+
+
+
     @Override
-    public void keyTyped(KeyEvent e) {
-        // key type is invoked when key is typed Uses KeyChar, char output
-        switch (e.getKeyChar()){
-            case 'a':
-                label.setLocation(label.getX()-10, label.getY());
-                break;
-            case 'w':
-                label.setLocation(label.getX(), label.getY()-10);
-                break;
-            case 's':
-                label.setLocation(label.getX(), label.getY()+10);
-                break;
-            case 'd':
-                label.setLocation(label.getX()+10, label.getY());
-                break;
-        }
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("Mouse clicked.");
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        //Key pressed = Invoke when a physical key is pressed down .Uses KeyCode , int output
-        switch (e.getKeyCode()){
-            case 37:
-                label.setLocation(label.getX()-10, label.getY());
-                break;
-            case 38:
-                label.setLocation(label.getX(), label.getY()-10);
-                break;
-            case 39:
-                label.setLocation(label.getX()+10, label.getY());
-                break;
-            case 40:
-                label.setLocation(label.getX(), label.getY()+10);
-                break;
-        }
+    public void mousePressed(MouseEvent e) {
+        System.out.println("You pressed the mouse.");
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        //Whenever a button is released
-//        System.out.println("You released key char " + e.getKeyChar());
-//        System.out.println("You released key code " + e.getKeyCode());
+    public void mouseReleased(MouseEvent e) {
+        System.out.println("You released the mouse.");
+    }
 
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        System.out.println("You entered the component.");
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        System.out.println("You exited the component.");
     }
 }

@@ -4,10 +4,11 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client implements Runnable{
+public class Client implements Runnable{      // Communication
     String serverIp;
     int port;
     Socket client;
+
     public Client(String serverIp,int serverPort){
         this.serverIp = serverIp;
         this.port = serverPort;
@@ -17,6 +18,7 @@ public class Client implements Runnable{
         catch (IOException ex){
             System.out.println(ex);
         }
+
     }
     @Override
     public void run() {
