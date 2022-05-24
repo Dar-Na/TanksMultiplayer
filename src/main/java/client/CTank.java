@@ -7,24 +7,31 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Tank {
+public class CTank {
     private Point coordinates;
     private KeyHandler keyHandler;
     private JPanel jPanel;
+    private int clientId;
     public BufferedImage sprite ;
-    public Tank(Point coordinates,JPanel jPanel, KeyHandler keyHandler){
 
+    public int getClientId() {
+        return clientId;
+    }
+
+    public CTank(int clientId, Point coordinates, JPanel jPanel, KeyHandler keyHandler){
+
+        this.clientId = clientId;
         this.coordinates = coordinates;
         this.keyHandler = keyHandler;
         this.jPanel = jPanel;
-        System.out.println("Reading the image...");
+
         try {
             sprite = ImageIO.read(new File("src/main/resources/tank.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println("End reading...");
+
     }
     public Point getCoordinates(){
         return this.coordinates;
@@ -48,18 +55,6 @@ public class Tank {
         jPanel.requestFocus(); // focus back to panel
     }
     public void update(){
-        if(keyHandler.rightPressed){
-            coordinates.x += 10;
 
-        }
-        if(keyHandler.leftPressed){
-            coordinates.x -= 10;
-        }
-        if(keyHandler.downPressed){
-            coordinates.y += 10;
-        }
-        if(keyHandler.upPressed){
-            coordinates.y -= 10;
-        }
     }
 }

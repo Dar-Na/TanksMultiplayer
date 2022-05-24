@@ -6,13 +6,16 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 public class IncomingSocketConnectionHandler implements Runnable{
-    private final ServerSocket server;
+    private final ServerSocket serverSocket;
     private static int numOfClients = 0;
-    public IncomingSocketConnectionHandler(int port){
+    private ServerLogic server;
+    public IncomingSocketConnectionHandler(int port, ServerLogic server){
+
+        this.server = server;
         try{
             System.out.println("Opening server at port " + port);
-            server = new ServerSocket(port); // server socket for listening clients
-            server.setSoTimeout(1000);  // will block a call to accept for certain time
+            serverSocket = new ServerSocket(port); // server socket for listening clients
+            serverSocket.setSoTimeout(1000);  // will block a call to accept for certain time
         }
         catch (IOException ex){
             throw new IllegalStateException();
@@ -25,7 +28,7 @@ public class IncomingSocketConnectionHandler implements Runnable{
         while(!Thread.interrupted()){
             try{
 
-                Socket socket = server.accept(); // thread to accept client
+                Socket socket = serverSocket.accept(); // thread to accept client
                 System.out.println("Client connected");
                 int uniqueId = numOfClients;
                 numOfClients++;
