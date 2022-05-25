@@ -1,36 +1,35 @@
 package client;
 
-import messages.MessageClientServer;
-import messages.MessageServerClient;
-import server.STank;
+import messages.MessageToClient;
+import messages.MessageToServer;
+import server.TankFromServer;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Random;
 
 public class ClientLogic implements Runnable{      // Communication with Server
-
-
-
-
-    private List<STank> serverTanks;
+    
     private String serverIp;
     private Socket client;
     private int port;
-    private MessageClientServer messageClientServer;
+    private MessageToServer messageToServer;
+    private List<TankFromServer> tanksFromServer;
 
-    public void setMessageClientServer(MessageClientServer messageClientServer) {
-        this.messageClientServer = messageClientServer;
+    public List<TankFromServer> getTanksFromServer() {
+        return tanksFromServer;
     }
 
-    public List<STank> getServerTanks() {
-        return serverTanks;
+    public void setMessageClientServer(MessageToServer messageClientServer) {
+        this.messageToServer = messageClientServer;
     }
+
+
 
     public ClientLogic(String serverIp, int serverPort){    // Creating Client socket
-        this.serverTanks = new ArrayList<>();
+
         this.serverIp = serverIp;
         this.port = serverPort;
         try{
@@ -41,67 +40,45 @@ public class ClientLogic implements Runnable{      // Communication with Server
         }
 
     }
-    public void parseMessage(MessageServerClient messageServerClient){      // Parsing message from server
-        String message = messageServerClient.getMessage();
-        if(message.equals("REGULAR")){
-            serverTanks = messageServerClient.getTanks();   // server tanks
+    public void parseMessage(MessageToClient messageToClient){      // Parsing message from server
+        if(messageToClient.getMessage() != null){
+           this.tanksFromServer = new ArrayList<>(messageToClient.getTanks());
 
         }
     }
     @Override
     public void run() {                                         // Communiction with server in thread
-        Scanner scanner  = new Scanner( System.in);
+
         try {
+            // Streams
             OutputStream os = client.getOutputStream();
             InputStream is = client.getInputStream();
-
-
             ObjectOutputStream oos = new ObjectOutputStream(os);
             ObjectInputStream ios = new ObjectInputStream(is);
 
 
 
-            // FIRST MESSAGE
-            MessageClientServer addTankMessage = new MessageClientServer("ADD_TANK");
-            oos.writeObject(addTankMessage);
-
-
             String serverCmd = "";
             // MESSAGE CYCLE
+            Random random = new Random();
+            int rand = random.nextInt();
             while (!serverCmd.equals("end")){
 
+                oos.writeObject(messageToServer);
+                MessageToClient messageFromServer = (MessageToClient) ios.readObject();
 
-                //System.out.println("Print message to a server");
-                //String message = scanner.nextLine();
-                if(messageClientServer == null){
-                    messageClientServer = new MessageClientServer("NULL");
+                parseMessage(messageFromServer);
 
-                }
-                else {
-                    //System.out.println(messageClientServer.getMessage());
-                }
-                oos.writeObject(messageClientServer);
-                messageClientServer = new MessageClientServer("NULL");
-
-
-                // Getting state from server
-                MessageServerClient messageServerClient = (MessageServerClient) ios.readObject();
-
-
-                for(STank tank :  messageServerClient.getTanks()){
-                    System.out.println(tank.getCoordinates().x + " " +tank.getCoordinates().y);
-                }
-
-                parseMessage(messageServerClient); // TODO
 
             }
+            // Streams Closed
             ios.close();
             oos.close();
             is.close();
             os.close();
 
         }
-        catch (IOException | ClassNotFoundException ex) {
+        catch (IOException  | ClassNotFoundException ex) {
             System.out.println(ex);
         }
     }

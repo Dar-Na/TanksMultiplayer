@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class CTank {
+public class ClientTank {
     private Point coordinates;
     private KeyHandler keyHandler;
     private JPanel jPanel;
@@ -18,7 +18,7 @@ public class CTank {
         return clientId;
     }
 
-    public CTank(int clientId, Point coordinates, JPanel jPanel, KeyHandler keyHandler){
+    public ClientTank(int clientId, Point coordinates, JPanel jPanel, KeyHandler keyHandler){
 
         this.clientId = clientId;
         this.coordinates = coordinates;

@@ -1,41 +1,56 @@
 package server;
 
-import messages.MessageServerClient;
+import messages.MessageToClient;
+import messages.MessageToServer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public  class ServerLogic { // Server logic
-    private static ServerLogic instance = null;
-    public static ServerLogic getInstance(){
-        if(instance == null)
-            instance = new ServerLogic();
-        return instance;
-    }
-    private static List<STank> tanks ;
+public class ServerLogic {
+    private int numOfClients = 0;
+    private List<TankFromServer> tanks;
 
-    public synchronized List<STank> getTanks() {
+
+    public List<TankFromServer> getTanks() {
         return tanks;
     }
-    public synchronized STank getTankWithId(int id){
-        for (var tank : tanks){
-            if(tank.getId() == id){
-                return tank;
-            }
-        }
-        return null;
+
+    public int getNumOfClients() {
+        return numOfClients;
     }
-    public synchronized void addTank(STank tank){
-        tanks.add(tank);
+
+    public void incNumOfClients() {
+
+        this.numOfClients++;
     }
 
     public ServerLogic(){
-        tanks = new ArrayList<>();
-    }
-    public synchronized MessageServerClient getMessage(){    // creating message with game state to be sent to client
-        MessageServerClient messageServerClient = new MessageServerClient("REGULAR");
-        messageServerClient.setTanks(tanks);
 
-        return messageServerClient;
+        tanks =new ArrayList<>();
+
+    }
+
+    public void addTank(int clientId){
+        Random random= new Random();
+        int x= random.nextInt(500);
+        int y= random.nextInt(500);
+        tanks.add(new TankFromServer(x,y,clientId));
+    }
+    public   MessageToClient getMessage(){
+        MessageToClient messageToClient = new MessageToClient("REGULAR");
+        messageToClient.setTanks(new ArrayList<>(tanks));
+        for (var tank : messageToClient.getTanks()){
+            System.out.println(tank.x + " " + tank.y);
+        }
+        return messageToClient;
+    }
+
+    public void parseMessage(MessageToServer messageFromClient) {
+        String message = messageFromClient.getMessage();
+
+        if(message.equals("RIGHT_PRESSED")){
+           System.out.println("PRESSED RIGHT");
+           tanks.get(0).x+=2;
+        }
+
     }
 }
