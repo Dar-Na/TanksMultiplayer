@@ -5,9 +5,7 @@ import messages.MessageToServer;
 import messages.RegularBullet;
 import messages.RegularTank;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Random;
@@ -65,11 +63,13 @@ public class ClientLogic implements Runnable{      // Communication with Server
 
         try {
             // Streams
-            ObjectOutputStream out =  new ObjectOutputStream(client.getOutputStream());
-
+            ObjectOutputStream out =  new ObjectOutputStream(new BufferedOutputStream(client.getOutputStream()));
+            out.writeObject( new MessageToServer("Init Message",0,0));
+            out.flush();
             System.out.println("out created");
-            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+            ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(client.getInputStream()));
             System.out.println("in created");
+
             String serverCmd = "";
             // MESSAGE CYCLE
             Random random = new Random();
@@ -79,7 +79,7 @@ public class ClientLogic implements Runnable{      // Communication with Server
                     this.messageToServer = new MessageToServer(" ",0,0);
                  }
                  out.writeObject(messageToServer);
-
+                 out.flush();
                  messageToServer = new MessageToServer("",0,0);     // set Message to empty
                  MessageToClient messageFromServer = (MessageToClient) in.readObject();
                  parseMessage(messageFromServer);

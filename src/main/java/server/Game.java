@@ -159,7 +159,7 @@ public class Game{
                     }
                     parseMessage(messageToServer,client.id);
                     client.out.writeObject(getMessage());
-
+                    client.out.flush();
 
 
                 } catch (ClassNotFoundException|IOException e) {
