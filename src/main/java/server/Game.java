@@ -74,14 +74,14 @@ public class Game{
         }
         for(int i = 0; i< serverBullets.size(); i++){
             ServerBullet serverBullet = serverBullets.get(i);
-            regularBullets.add(new RegularBullet(serverBullet.x ,serverBullet .y ));
+            regularBullets.add(new RegularBullet((int)serverBullet.x ,(int)serverBullet .y ));
         }
         messageToClient.setTanks(regularTanks);
         messageToClient.setBullets(regularBullets);
         return messageToClient;
     }
     public void parseMessage(MessageToServer messageToServer, int clientId){
-        int Tankspeed= 8;
+        int Tankspeed= 2;
         Point point = new Point(0,0);
         Boolean isMoved = false;
         if(messageToServer != null){
@@ -112,8 +112,9 @@ public class Game{
                     int mouseX = messageToServer.getMouseX();
                     int mouseY = messageToServer.getMouseY();
                     double vecLength = Math.sqrt(Math.pow(( tankCenterX - mouseX), 2) + Math.pow(( tankCenterY - mouseY),2));
-                    int xVec =  (int)(((mouseX -  tankCenterX)*10)/vecLength) ; // normalizing vector
-                    int yVec =  (int)(((mouseY -  tankCenterY)*10)/vecLength) ;
+                    double xVec =  (((mouseX -  tankCenterX))/vecLength) ; // normalizing vector
+                    double yVec =  (((mouseY -  tankCenterY))/vecLength) ;
+
                     serverBullets.add(new ServerBullet( tankCenterX,tankCenterY,xVec,yVec,clientId));
                 }
             }
@@ -204,9 +205,9 @@ public class Game{
                         serverBullets.remove(serverBullet);
                     }
                 }
-
-                serverBullet.x += serverBullet.xSpeed;
-                serverBullet.y += serverBullet.ySpeed;
+                int speedK = 10;
+                serverBullet.x += serverBullet.xSpeed * speedK;
+                serverBullet.y += serverBullet.ySpeed * speedK;
                 if(serverBullet.x > xBorder || serverBullet.x < 0){
                     serverBullets.remove(serverBullet);
                 }

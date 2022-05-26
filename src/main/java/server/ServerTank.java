@@ -58,6 +58,7 @@ public class ServerTank implements Serializable {
     }
 
     public Boolean checkReload(){
+
         if(System.currentTimeMillis() - lastReload > 1000){
             lastReload = System.currentTimeMillis();
             return true;

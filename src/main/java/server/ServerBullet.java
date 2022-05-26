@@ -3,15 +3,15 @@ package server;
 import java.io.Serializable;
 
 public class ServerBullet implements Serializable {
-    public  int x;
-    public int y;
+    public double x;
+    public double y;
     public int height = 10;
     public int width = 10;
-    public int xSpeed;
-    public int ySpeed;
+    public double xSpeed;
+    public double ySpeed;
     public int clientId;
     public int damage;
-    ServerBullet(int x, int y,int xSpeed,int ySpeed, int clientId){
+    ServerBullet(double x, double y,double xSpeed,double ySpeed, int clientId){
         this.x = x;
         this.y = y;
         this.xSpeed = xSpeed;
