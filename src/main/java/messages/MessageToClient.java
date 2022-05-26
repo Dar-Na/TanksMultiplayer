@@ -1,10 +1,7 @@
 package messages;
 
-import server.TankFromServer;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 public class MessageToClient implements Serializable {
     private String message;
@@ -13,14 +10,23 @@ public class MessageToClient implements Serializable {
         return message;
     }
 
-    private List<TankFromServer> tanks;
+    private LinkedList<RegularTank> tanks;
+    private LinkedList<RegularBullet> bullets;
 
-    public List<TankFromServer> getTanks() {
+    public LinkedList<RegularTank> getTanks() {
         return tanks;
     }
 
-    public void setTanks(List<TankFromServer> tanks) {
-        this.tanks = new ArrayList<>(tanks);
+    public void setTanks(LinkedList<RegularTank> tanks) {
+        this.tanks =tanks;
+    }
+
+    public LinkedList<RegularBullet> getBullets() {
+        return bullets;
+    }
+
+    public void setBullets(LinkedList<RegularBullet> bullets) {
+        this.bullets = bullets;
     }
 
     public MessageToClient(String message){

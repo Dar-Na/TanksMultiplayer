@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
 
 public class Server {
     private int port;
@@ -11,18 +12,20 @@ public class Server {
 
     }
     public void start(){
-        System.out.println("I am a server");
-        ServerLogic serverLogic = new ServerLogic();
+        int clientNumber = 2;                     // number of clients should be known before gamer
+
+        LinkedList<Socket> clients = new LinkedList<>();
         try {
             ServerSocket listner = new ServerSocket(9797);           // Start listining port 9797
-            while (true) {
+            for(int i = 0;i< clientNumber; i++) {                           // getting all clients
                 System.out.println("Server waiting for connections");
                 Socket client = listner.accept();
+                clients.add(client);                                     // Adding client to list of sockets
                 System.out.println("Client connected");
-                ClientHandler clientHandler = new ClientHandler(client,serverLogic);
-                Thread clientThread = new Thread(clientHandler);
-                clientThread.start();
             }
+            System.out.println("Creating game");
+            Game game = new Game(clients);
+            game.run();
         }
         catch (IOException ex){
             throw new IllegalStateException();

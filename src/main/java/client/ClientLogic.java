@@ -2,28 +2,36 @@ package client;
 
 import messages.MessageToClient;
 import messages.MessageToServer;
-import server.TankFromServer;
+import messages.RegularBullet;
+import messages.RegularTank;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class ClientLogic implements Runnable{      // Communication with Server
-    
+
+    public final int screenWidth = 1280;
+    public final int screenHeight = 720;
     private String serverIp;
     private Socket client;
     private int port;
     private MessageToServer messageToServer;
-    private List<TankFromServer> tanksFromServer;
+    private LinkedList<RegularTank> regularTanks;
+    private LinkedList<RegularBullet> regularBullets;
 
-    public List<TankFromServer> getTanksFromServer() {
-        return tanksFromServer;
+    public LinkedList<RegularTank> getRegularTanks() {
+        return regularTanks;
     }
+    public LinkedList<RegularBullet> getRegularBullets() {
+        return regularBullets;
+    }
+    public void setMessageClientServer(MessageToServer msg) {
+        this.messageToServer =msg;
 
-    public void setMessageClientServer(MessageToServer messageClientServer) {
-        this.messageToServer = messageClientServer;
     }
 
 
@@ -41,9 +49,11 @@ public class ClientLogic implements Runnable{      // Communication with Server
 
     }
     public void parseMessage(MessageToClient messageToClient){      // Parsing message from server
-        if(messageToClient.getMessage() != null){
-           this.tanksFromServer = new ArrayList<>(messageToClient.getTanks());
-
+        if(messageToClient.getTanks() != null){
+           this.regularTanks = messageToClient.getTanks();
+        }
+        if(messageToClient.getBullets() != null){
+            this.regularBullets = messageToClient.getBullets();
         }
     }
     @Override
@@ -51,31 +61,35 @@ public class ClientLogic implements Runnable{      // Communication with Server
 
         try {
             // Streams
-            OutputStream os = client.getOutputStream();
-            InputStream is = client.getInputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(os);
-            ObjectInputStream ios = new ObjectInputStream(is);
+            ObjectOutputStream out =  new ObjectOutputStream(client.getOutputStream());
 
-
-
+            System.out.println("out created");
+            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+            System.out.println("in created");
             String serverCmd = "";
             // MESSAGE CYCLE
             Random random = new Random();
             int rand = random.nextInt();
             while (!serverCmd.equals("end")){
+                 if(messageToServer == null) {
+                    this.messageToServer = new MessageToServer(" ",0,0);
+                 }
+                 out.writeObject(messageToServer);
 
-                oos.writeObject(messageToServer);
-                MessageToClient messageFromServer = (MessageToClient) ios.readObject();
-
-                parseMessage(messageFromServer);
-
+                 messageToServer = new MessageToServer("",0,0);     // set Message to empty
+                 MessageToClient messageFromServer = (MessageToClient) in.readObject();
+                 parseMessage(messageFromServer);
+                 var bullets = messageFromServer.getBullets();
+                 for (int i =0;i<bullets.size();i++){
+                     System.out.println(bullets.size());
+                 }
 
             }
+            in.close();
+            out.close();
+
             // Streams Closed
-            ios.close();
-            oos.close();
-            is.close();
-            os.close();
+           // TODO
 
         }
         catch (IOException  | ClassNotFoundException ex) {

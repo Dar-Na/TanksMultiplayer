@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
-    public boolean leftPressed,rightPressed,upPressed,downPressed = false;
+    public boolean leftPressed,rightPressed,upPressed,downPressed, qPressed = false;
     @Override
     public void keyTyped(KeyEvent e) {
         // key type is invoked when key is typed Uses KeyChar, char output
@@ -21,6 +21,9 @@ public class KeyHandler implements KeyListener {
                 break;
             case 'd':
                 rightPressed = true;
+                break;
+            case 'q':
+                qPressed = true;
                 break;
         }
     }
@@ -49,6 +52,9 @@ public class KeyHandler implements KeyListener {
                 break;
             case 'd':
                 rightPressed = false;
+                break;
+            case 'q':
+                qPressed = false;
                 break;
         }
 

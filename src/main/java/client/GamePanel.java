@@ -1,7 +1,8 @@
 package client;
 
 import messages.MessageToServer;
-import server.TankFromServer;
+import messages.RegularBullet;
+import messages.RegularTank;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,21 +10,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GamePanel extends JPanel implements Runnable {
-    final int screenWidth = 500;
-    final int screenHeight = 500;
+
     Thread gameThread;
     KeyHandler keyHandler;
+    MouseHandler mouseHandler;
     ClientLogic clientLogic;
     private java.util.List<ClientTank> clientTanks;
+    private java.util.List<ClientBullet> clientBullets;
+    private List<ClientWall> clientWalls;
     public synchronized List<ClientTank> getClientTanks(){
         clientTanks = new ArrayList<>();
-        if(clientLogic.getTanksFromServer() != null){
-            for(TankFromServer serverTank : clientLogic.getTanksFromServer()){
-                clientTanks.add(new ClientTank(0, new Point(serverTank.x, serverTank.y),this,keyHandler));
+        if(clientLogic.getRegularTanks() != null){
+            for(RegularTank regularTank : clientLogic.getRegularTanks()){
+                clientTanks.add(new ClientTank(0, new Point(regularTank.x, regularTank.y),this,keyHandler));
             }
         }
 
         return clientTanks;
+    }
+    public synchronized List<ClientBullet> getClientBullets(){
+        clientBullets = new ArrayList<>();
+        if(clientLogic.getRegularBullets() != null){
+            for(RegularBullet regularBullet : clientLogic.getRegularBullets()){
+                clientBullets.add(new ClientBullet(0, new Point(regularBullet.x, regularBullet.y),this,keyHandler));
+            }
+        }
+
+        return clientBullets;
+    }
+    public void initWalls(){
+        clientWalls.add(new ClientWall(new Point(200,250), 10,150,this));
+        clientWalls.add(new ClientWall(new Point(1000,450), 10,150,this));
+        clientWalls.add(new ClientWall(new Point(500,0), 10,300,this));
+        clientWalls.add(new ClientWall(new Point(350,600), 10,120,this));
+        clientWalls.add(new ClientWall(new Point(600,500), 200,10,this));
+        clientWalls.add(new ClientWall(new Point(800,200), 300,10,this));
     }
     // FPS
     final  int fps = 60;
@@ -31,15 +52,20 @@ public class GamePanel extends JPanel implements Runnable {
 
     public GamePanel(ClientLogic client){
         this.clientTanks = new ArrayList<>();
+        this.clientBullets = new ArrayList<>();
+        this.clientWalls = new ArrayList<>();
+        initWalls();
+
         this.clientLogic = client;
         System.out.println("Creating key handler");
         keyHandler = new KeyHandler();
-
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        mouseHandler = new MouseHandler();
+        this.setPreferredSize(new Dimension(clientLogic.screenWidth, clientLogic.screenHeight));
         this.setBackground(Color.ORANGE);
         this.setDoubleBuffered(true); // will improve game's rendering
 
         this.addKeyListener(keyHandler); // frame is now respond for key events
+        this.addMouseListener(mouseHandler);
         this.setFocusable(true); // for key handling
         this.setLayout(null);
 
@@ -91,22 +117,34 @@ public class GamePanel extends JPanel implements Runnable {
         if(keyHandler.upPressed){
             message = "UP_PRESSED";
         }
+        if(mouseHandler.mousePressed){
+            message = "MOUSE_PRESSED";
 
-        clientLogic.setMessageClientServer(new MessageToServer(message));
+        }
+
+        clientLogic.setMessageClientServer(new MessageToServer(message, mouseHandler.x,mouseHandler.y));
+
 
     }
     public void update(){
 
         getClientTanks();
+        getClientBullets();
     }
     public void paintComponent( Graphics g){
         super.paintComponent(g);            // JPanel class is parent
         Graphics2D g2 = (Graphics2D) g;     // More functions for 2d drawings
 
-        for(ClientTank tank : clientTanks){
-            tank.draw(g2);
-
+        for(int i =0;i<clientTanks.size();i++){
+           clientTanks.get(i).draw(g2);
         }
+        for(int i =0;i<clientBullets.size();i++){
+            clientBullets.get(i).draw(g2);
+        }
+        for(int i =0;i<clientWalls.size();i++){
+            clientWalls.get(i).draw(g2);
+        }
+
         g2.dispose();
     }
 

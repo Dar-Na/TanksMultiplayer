@@ -7,11 +7,8 @@ public class ClientMain {
         ClientLogic clientLogic = new ClientLogic("127.0.0.1", 9797);
         Thread thread = new Thread(clientLogic);
         thread.start(); // thread for communication
-
         // Game drawing
-
         GameView gameView = new GameView(clientLogic);
-
 
     }
 }
