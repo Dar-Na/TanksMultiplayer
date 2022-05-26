@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
         clientTanks = new ArrayList<>();
         if(clientLogic.getRegularTanks() != null){
             for(RegularTank regularTank : clientLogic.getRegularTanks()){
-                clientTanks.add(new ClientTank(0, new Point(regularTank.x, regularTank.y),this,keyHandler));
+                clientTanks.add(new ClientTank(0, new Point(regularTank.x, regularTank.y),regularTank.health,this,keyHandler));
             }
         }
 

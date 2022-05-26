@@ -51,6 +51,10 @@ public class ClientLogic implements Runnable{      // Communication with Server
     public void parseMessage(MessageToClient messageToClient){      // Parsing message from server
         if(messageToClient.getTanks() != null){
            this.regularTanks = messageToClient.getTanks();
+           for(int i = 0; i< regularTanks.size();i++){
+               System.out.println("Health of tanks" + regularTanks.get(i).health);
+           }
+
         }
         if(messageToClient.getBullets() != null){
             this.regularBullets = messageToClient.getBullets();
@@ -79,10 +83,8 @@ public class ClientLogic implements Runnable{      // Communication with Server
                  messageToServer = new MessageToServer("",0,0);     // set Message to empty
                  MessageToClient messageFromServer = (MessageToClient) in.readObject();
                  parseMessage(messageFromServer);
-                 var bullets = messageFromServer.getBullets();
-                 for (int i =0;i<bullets.size();i++){
-                     System.out.println(bullets.size());
-                 }
+
+
 
             }
             in.close();

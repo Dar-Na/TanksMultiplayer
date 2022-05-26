@@ -23,9 +23,10 @@ public class Game{
     public Game(LinkedList<Socket> sockets){
         LinkedList<Point> tankSpots = new LinkedList<>();
         tankSpots.add(new Point(70,70));
-        tankSpots.add(new Point(1150,70));
-        tankSpots.add(new Point(70,500));
         tankSpots.add(new Point(1150,500));
+        tankSpots.add(new Point(70,500));
+        tankSpots.add(new Point(1150,70));
+
 
 
 
@@ -68,10 +69,12 @@ public class Game{
         LinkedList<RegularTank> regularTanks = new LinkedList<>();
         LinkedList<RegularBullet> regularBullets = new LinkedList<>();
         for(int i = 0; i< serverTanks.size(); i++){
-            regularTanks.add(new RegularTank(serverTanks.get(i).x ,serverTanks.get(i).y ));
+            ServerTank serverTank = serverTanks.get(i);
+            regularTanks.add(new RegularTank(serverTank.x ,serverTank.y, serverTank.getHealth()));
         }
         for(int i = 0; i< serverBullets.size(); i++){
-            regularBullets.add(new RegularBullet(serverBullets.get(i).x ,serverBullets.get(i).y ));
+            ServerBullet serverBullet = serverBullets.get(i);
+            regularBullets.add(new RegularBullet(serverBullet.x ,serverBullet .y ));
         }
         messageToClient.setTanks(regularTanks);
         messageToClient.setBullets(regularBullets);
@@ -185,7 +188,9 @@ public class Game{
                     ServerTank tank = serverTanks.get(j);
 
                     if(tank.clientId != serverBullet.clientId && tank.hitByBullet(serverBullet)){
-                        serverTanks.remove(tank);
+                        if(tank.isDead){
+                            serverTanks.remove(tank);
+                        }
                         serverBullets.remove(serverBullet);
                     }
 

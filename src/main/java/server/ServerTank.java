@@ -10,10 +10,27 @@ public class ServerTank implements Serializable {
     public int y;
     public int clientId;
     private long lastReload;
+    public Boolean isDead = false;
+    public int getHealth() {
+        return health;
+    }
+    public void minusHealth(int damage){
+        if(health - damage <= 0){
+            isDead = true;
+            health = 0;
+        }
+        else {
+            health -= damage;
+        }
+    }
     public Boolean hitByBullet(ServerBullet bullet){
-        boolean q1 = bullet.x > this.x && bullet.x < this.x + width;
-        boolean q2 = bullet.y > this.y && bullet.y < this.y + height;
-        if(q1 && q2){
+        if(bullet.clientId == this.clientId) return false;
+        boolean q1 = this.x < bullet.x + bullet.width;
+        boolean q2 =this.x +  this.width > bullet.x;
+        boolean q3 = this.y < bullet.y + bullet.height;
+        boolean q4 = this.height +  this.y > bullet.y;
+        if(q1 && q2 && q3 && q4){
+            minusHealth(bullet.damage);
             return true;
         }
         return false;
