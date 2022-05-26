@@ -16,11 +16,11 @@ public class Client {
         this.id = id;
         try {
             this.out = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-            System.out.println("out created");
+
             this.in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-            System.out.println("in created");
+
             MessageToServer messageToServer = (MessageToServer)in.readObject();
-            System.out.println(messageToServer.getMessage());
+
             out.writeObject(new MessageToClient("Init Client"));
             out.flush();
 

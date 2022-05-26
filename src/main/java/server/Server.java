@@ -18,12 +18,12 @@ public class Server {
         try {
             ServerSocket listner = new ServerSocket(9797);           // Start listining port 9797
             for(int i = 0;i< clientNumber; i++) {                           // getting all clients
-                System.out.println("Server waiting for connections");
+
                 Socket client = listner.accept();
                 clients.add(client);                                     // Adding client to list of sockets
-                System.out.println("Client connected");
+
             }
-            System.out.println("Creating game");
+
             Game game = new Game(clients);
             game.run();
         }

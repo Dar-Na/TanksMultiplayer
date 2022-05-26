@@ -122,7 +122,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         }
 
-        clientLogic.setMessageClientServer(new MessageToServer(message, mouseHandler.x,mouseHandler.y));
+        clientLogic.setMessageClientServer(new MessageToServer(mouseHandler.mousePressed,keyHandler.upPressed,
+                keyHandler.downPressed,keyHandler.rightPressed,keyHandler.leftPressed,mouseHandler.x,mouseHandler.y
+                ));
 
 
     }

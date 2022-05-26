@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class MessageToClient implements Serializable {
-    private String message;
 
+    private String message;
+    public MessageToClient(String message){
+        this.message = message;
+    }
     public String getMessage() {
         return message;
     }
@@ -29,7 +32,4 @@ public class MessageToClient implements Serializable {
         this.bullets = bullets;
     }
 
-    public MessageToClient(String message){
-       this.message = message;
-   }
 }

@@ -64,7 +64,7 @@ public class ClientLogic implements Runnable{      // Communication with Server
         try {
             // Streams
             ObjectOutputStream out =  new ObjectOutputStream(new BufferedOutputStream(client.getOutputStream()));
-            out.writeObject( new MessageToServer("Init Message",0,0));
+            out.writeObject( new MessageToServer());
             out.flush();
             System.out.println("out created");
             ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(client.getInputStream()));
@@ -76,11 +76,11 @@ public class ClientLogic implements Runnable{      // Communication with Server
             int rand = random.nextInt();
             while (!serverCmd.equals("end")){
                  if(messageToServer == null) {
-                    this.messageToServer = new MessageToServer(" ",0,0);
+                    this.messageToServer = new MessageToServer();
                  }
                  out.writeObject(messageToServer);
                  out.flush();
-                 messageToServer = new MessageToServer("",0,0);     // set Message to empty
+                 messageToServer = new MessageToServer();     // set Message to empty
                  MessageToClient messageFromServer = (MessageToClient) in.readObject();
                  parseMessage(messageFromServer);
 

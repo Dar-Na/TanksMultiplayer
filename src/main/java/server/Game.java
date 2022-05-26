@@ -86,25 +86,25 @@ public class Game{
         Boolean isMoved = false;
         if(messageToServer != null){
 
-            if(messageToServer.getMessage().equals("RIGHT_PRESSED")){
+            if(messageToServer.right){
                 point.x = Tankspeed;
                 isMoved = true;
             }
-            if(messageToServer.getMessage().equals("LEFT_PRESSED")){
+            if(messageToServer.left){
                 point.x = -1*Tankspeed;
                 isMoved = true;
 
             }
-            if(messageToServer.getMessage().equals("UP_PRESSED")){
+            if(messageToServer.up){
                 point.y = -1*Tankspeed;
                 isMoved = true;
             }
-            if(messageToServer.getMessage().equals("DOWN_PRESSED")){
+            if(messageToServer.down){
                 point.y = Tankspeed;
                 isMoved = true;
             }
 
-            if(messageToServer.getMessage().equals("MOUSE_PRESSED")){
+            if(messageToServer.pressed){
                 ServerTank serverTank = getTankById(clientId);
                 if(serverTank.checkReload()){
                     int tankCenterX = serverTank.x + serverTank.width/2;
@@ -154,9 +154,7 @@ public class Game{
 
                 try {
                     MessageToServer messageToServer = (MessageToServer)client.in.readObject();
-                    if(messageToServer != null && messageToServer.getMessage().equals("MOUSE_PRESSED")){
-                        System.out.println("Mouse PRESSED " + messageToServer.getMouseX() + " "+messageToServer.getMouseY());
-                    }
+
                     parseMessage(messageToServer,client.id);
                     client.out.writeObject(getMessage());
                     client.out.flush();
