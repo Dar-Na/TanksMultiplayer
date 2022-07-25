@@ -66,6 +66,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.addKeyListener(keyHandler); // frame is now respond for key events
         this.addMouseListener(mouseHandler);
+        this.addMouseMotionListener(mouseHandler);
         this.setFocusable(true); // for key handling
         this.setLayout(null);
 

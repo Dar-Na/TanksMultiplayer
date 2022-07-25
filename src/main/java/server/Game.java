@@ -27,9 +27,6 @@ public class Game{
         tankSpots.add(new Point(70,500));
         tankSpots.add(new Point(1150,70));
 
-
-
-
         int numOfClients =0;
         this.serverTanks = new LinkedList<>();
         this.serverWalls = new LinkedList<>();
